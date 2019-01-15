@@ -11,7 +11,7 @@ public class Testss {
         UserService userService = atx.getBean("userService",UserService.class);
         ItripUser user = new ItripUser();
         user.setUserCode("g591379654@163.com");
-       
+        user.setUserName("test");
         try {
             userService.itriptxcreateUser(user);
         } catch (Exception e) {
