@@ -16,7 +16,7 @@ public class MailServiceImpl implements MailService {
     @Override
     public void sendActivationMail(String mailTo, String activationCode) {
         activationMailMessage.setTo(mailTo);
-        activationMailMessage.setText("您的激活码是："+activationCode);
+        activationMailMessage.setText("您的激活码是："+activationCode+"；请在三十分钟之内激活您的账号");
         mailSender.send(activationMailMessage);
     }
 }

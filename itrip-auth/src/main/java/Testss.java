@@ -18,4 +18,19 @@ public class Testss {
             e.printStackTrace();
         }
     }
+    @Test
+    public void test2(){
+        ApplicationContext atx = new ClassPathXmlApplicationContext("applicationContext.xml");
+        UserService userService = atx.getBean("userService",UserService.class);
+        ItripUser user = new ItripUser();
+        try {
+            if(userService.activate("g591379654@163.com","587b631d1b1f4483c00826a9d70a2a09")==true){
+                System.out.println("修改成功");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
 }

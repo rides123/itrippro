@@ -30,7 +30,7 @@
 	
 	<bean id="activationMailMessage" class="org.springframework.mail.SimpleMailMessage" scope="prototype">
 		<property name="from" value="591379654@qq.com"></property>
-		<property name="subject" value="【i旅行】请激活您的账户"></property>
+		<property name="subject" value="【i旅行】请在半个小时之内激活您的账户"></property>
 		<property name="text" value=""></property>
 	</bean>
 	
