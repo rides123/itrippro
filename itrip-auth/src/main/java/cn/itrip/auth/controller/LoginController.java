@@ -34,51 +34,45 @@ import cn.itrip.common.ErrorCode;
 @Controller
 @RequestMapping(value = "/api")
 public class LoginController {
-
 	@Resource
 	private UserService userService;
-
 	@Resource
 	private TokenService tokenService;
 
-	@RequestMapping(value="/dologin",method=RequestMethod.POST,produces= "application/json")
-	public @ResponseBody Dto dologin(
-			@RequestParam
-			String name,
-			@RequestParam
-			String password,
-			HttpServletRequest request) {
-		try {
-			ItripUser user = userService.login(name,MD5.getMd5(password,32));
-			if(EmptyUtils.isNotEmpty(user)){
+	@RequestMapping(value="/dologin",method= RequestMethod.POST,produces= "application/json")
+	public @ResponseBody Dto dologin(@RequestParam String name, @RequestParam String password, HttpServletRequest request) {
+		try{
+			ItripUser user = userService.login(name, MD5.getMd5(password,32));
+			if (EmptyUtils.isNotEmpty(user)){
 				String userAgent = request.getHeader("user-agent");
 				String token = tokenService.generateToken(userAgent,user);
 				tokenService.save(token,user);
-				ItripTokenVO vo = new ItripTokenVO(token
-						,Calendar.getInstance().getTimeInMillis()+2*60*60+1000,
+
+				ItripTokenVO vo = new ItripTokenVO(token,
+						Calendar.getInstance().getTimeInMillis()+2*60*60*1000,
 						Calendar.getInstance().getTimeInMillis());
 				return DtoUtil.returnDataSuccess(vo);
-			}else{
-				return DtoUtil.returnFail("用户密码错误",ErrorCode.AUTH_AUTHENTICATION_FAILED);
+			}else {
+				return DtoUtil.returnFail("用户密码错误", ErrorCode.AUTH_AUTHENTICATION_FAILED);
 			}
-		} catch (Exception e) {
-			return DtoUtil.returnFail(e.getMessage(),ErrorCode.AUTH_AUTHENTICATION_FAILED);
+		}catch (Exception e){
+			e.printStackTrace();
+			return DtoUtil.returnFail(e.getMessage(), ErrorCode.AUTH_AUTHENTICATION_FAILED);
 		}
 	}
 
-
 	@RequestMapping(value="/logout",method=RequestMethod.GET,produces="application/json",headers="token")
-	public @ResponseBody Dto logout(HttpServletRequest request) {
+	public @ResponseBody Dto logout(HttpServletRequest request){
 		String token = request.getHeader("token");
-		try {
-			if (tokenService.validate(request.getHeader("user-agent"), token)) {
+		try{
+			if (tokenService.validate(request.getHeader("user-agent"),token)){
 				tokenService.delete(token);
 				return DtoUtil.returnSuccess();
-			}else
+			}
+			else
 				return DtoUtil.returnFail("token无效",ErrorCode.AUTH_TOKEN_INVALID);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return DtoUtil.returnFail("退出失败",ErrorCode.AUTH_TOKEN_INVALID);
+		}catch (Exception e){
+			return DtoUtil.returnFail(e.getMessage(),ErrorCode.AUTH_TOKEN_INVALID);
 		}
 	}
 

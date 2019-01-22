@@ -2,6 +2,6 @@
     pageEncoding="UTF-8"%>
 <html>
 <body>
-<h2>Hello World!</h2>
+<h2>支付成功!</h2>
 </body>
 </html>
